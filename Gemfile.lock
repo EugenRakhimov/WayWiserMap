@@ -138,7 +138,6 @@ PLATFORMS
 DEPENDENCIES
   bootstrap (~> 4.0.0.alpha3)
   byebug
-  coffee-rails (~> 4.1.0)
   jbuilder (~> 2.0)
   jquery-rails
   rails (= 4.2.4)
