@@ -4,7 +4,8 @@ Rails.application.routes.draw do
 
   get 'visitors/index'
 
-  get 'locations/index'
+  resources :locations, only: [:index]
+
 
 
 end
