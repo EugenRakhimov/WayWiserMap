@@ -1,20 +1,40 @@
-function putLocationsOnMap(centerPoint, locations)
+"use strict";
+function putLocationsOnMap(map,locations)
+{ var markers = []
+  // clearMarkers();
+    for (var i = locations.length-1; i >-1; i--) {
+      let marker = new google.maps.Marker({
+            position: {lat: locations[i].latitude,  
+                      lng: locations[i].longitude},
+            map: map
+        })
+      console.log(locations[i].info)
+      let infowindow = new google.maps.InfoWindow({
+        content: locations[i].info
+      });
+      markers.push(marker);
+      marker.addListener('click', function() {
+        infowindow.open(map, marker);
+      });
+  }
+}
+function initMap(centerPoint, locations)
 {
-  var mapCanvas = document.getElementById('map-canvas');
+  var mapCanvas = document.getElementById('map');
   var mapOptions = {
     center: new google.maps.LatLng(centerPoint.latitude, centerPoint.longitude),
     zoom: 12,
     mapTypeId: google.maps.MapTypeId.ROADMAP
   }
   var map = new google.maps.Map(mapCanvas, mapOptions);
-  console.log(map);
+  putLocationsOnMap(map,locations);
 }
 function getLocationsFromSite(locations)
 {
   // console.log('test')
   var jqxhr = $.get("/locations",function ajaxResultWithLocation( data ) {
          
-       putLocationsOnMap(data.center_point,data.locations)
+       initMap(data.center_point,data.locations)
      }
    )
    .fail(function() {
@@ -23,7 +43,7 @@ function getLocationsFromSite(locations)
   
 }
 function initialize() {
-  locations = []
+  let locations = []
   getLocationsFromSite(locations)
   
 }
