@@ -14,10 +14,23 @@ function putLocationsOnMap(map,locations)
       });
       markers.push(marker);
       marker.addListener('click', function() {
-        infowindow.open(map, marker);
+        infowindow.open(map, marker)
       });
   }
 }
+function getNewLocations(bounds, map){
+  console.log(bounds.getSouthWest().toJSON());
+  var jqxhr = $.get("/locations",{ northEast: bounds.getNorthEast().toJSON(),
+    southWest: bounds.getSouthWest().toJSON() },function ajaxResultWithLocation( data ) {
+         
+       // initMap(data.center_point,data.locations)
+     }
+   )
+   .fail(function() {
+    alert( "error" );
+  })
+}
+
 function initMap(centerPoint, locations)
 {
   var mapCanvas = document.getElementById('map');
@@ -26,12 +39,15 @@ function initMap(centerPoint, locations)
     zoom: 12,
     mapTypeId: google.maps.MapTypeId.ROADMAP
   }
-  var map = new google.maps.Map(mapCanvas, mapOptions);
+  let map = new google.maps.Map(mapCanvas, mapOptions)
+  google.maps.event.addListener(map, 'bounds_changed', function boundsChanged() {
+      var bounds = map.getBounds()
+      getNewLocations(bounds, map);
+  })
   putLocationsOnMap(map,locations);
 }
 function getLocationsFromSite(locations)
 {
-  // console.log('test')
   var jqxhr = $.get("/locations",function ajaxResultWithLocation( data ) {
          
        initMap(data.center_point,data.locations)
