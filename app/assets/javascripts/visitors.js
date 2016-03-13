@@ -6,9 +6,7 @@ function putLocationsOnMap(map,locations)
             position: {lat: locations[i].lat,  
                        lng: locations[i].lng},
             map: map
-        })
-      console.log("here")
-      console.log(locations[i].info)
+        })      
       let infowindow = new google.maps.InfoWindow({
         content: locations[i].info
       });
@@ -34,7 +32,6 @@ function getNewLocations(bounds, map){
 
 function initMap(centerPoint, locations)
 {
-  console.log(locations)
   var mapCanvas = document.getElementById('map');
   var mapOptions = {
     center: new google.maps.LatLng(centerPoint.lat, centerPoint.lng),
