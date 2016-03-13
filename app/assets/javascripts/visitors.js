@@ -1,13 +1,13 @@
 "use strict";
 function putLocationsOnMap(map,locations)
-{ var markers = []
-  // clearMarkers();
+{ var markers = []      
     for (var i = locations.length-1; i >-1; i--) {
       let marker = new google.maps.Marker({
-            position: {lat: locations[i].latitude,  
-                      lng: locations[i].longitude},
+            position: {lat: locations[i].lat,  
+                       lng: locations[i].lng},
             map: map
         })
+      console.log("here")
       console.log(locations[i].info)
       let infowindow = new google.maps.InfoWindow({
         content: locations[i].info
@@ -18,10 +18,11 @@ function putLocationsOnMap(map,locations)
       });
   }
 }
-function getNewLocations(bounds, map){
-  console.log(bounds.getSouthWest().toJSON());
+function getNewLocations(bounds, map){ 
+  var centerPoint = bounds.getCenter()   
   var jqxhr = $.get("/locations",{ northEast: bounds.getNorthEast().toJSON(),
-    southWest: bounds.getSouthWest().toJSON() },function ajaxResultWithLocation( data ) {
+    southWest: bounds.getSouthWest().toJSON(),
+    centerPoint: centerPoint.toJSON()},function ajaxResultWithLocation( data ) {
          
        // initMap(data.center_point,data.locations)
      }
@@ -33,9 +34,10 @@ function getNewLocations(bounds, map){
 
 function initMap(centerPoint, locations)
 {
+  console.log(locations)
   var mapCanvas = document.getElementById('map');
   var mapOptions = {
-    center: new google.maps.LatLng(centerPoint.latitude, centerPoint.longitude),
+    center: new google.maps.LatLng(centerPoint.lat, centerPoint.lng),
     zoom: 12,
     mapTypeId: google.maps.MapTypeId.ROADMAP
   }
