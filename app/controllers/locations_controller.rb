@@ -1,4 +1,5 @@
 class LocationsController < ApplicationController
+  include LocationsHelper
   def index
     # For the sake of example center point by default is set in Auckland
     northEast = point_to_float(params[:northEast])
@@ -8,8 +9,5 @@ class LocationsController < ApplicationController
     locations = Location.around(center_point,southWest, northEast)    
     render json: {center_point:center_point, locations:locations}
   end
-  def point_to_float point
-    return nil if !point
-    point_f = {lat:point[:lat].to_f,lng:point[:lng].to_f}
-  end
+  
 end

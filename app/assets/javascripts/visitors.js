@@ -1,6 +1,17 @@
 "use strict";
+var markers = []
+function clearMarkers() {
+  for (var i = 0; i < markers.length; i++) {
+    markers[i].setMap(null);
+  }
+  markers = [];
+}
+
 function putLocationsOnMap(map,locations)
-{ var markers = []      
+{   if(markers.length >0 )
+    {
+      clearMarkers()
+    }   
     for (var i = locations.length-1; i >-1; i--) {
       let marker = new google.maps.Marker({
             position: {lat: locations[i].lat,  
@@ -16,21 +27,22 @@ function putLocationsOnMap(map,locations)
       });
   }
 }
+
 function getNewLocations(bounds, map){ 
   var centerPoint = bounds.getCenter()   
   var jqxhr = $.get("/locations",{ northEast: bounds.getNorthEast().toJSON(),
     southWest: bounds.getSouthWest().toJSON(),
-    centerPoint: centerPoint.toJSON()},function ajaxResultWithLocation( data ) {
-         
-       // initMap(data.center_point,data.locations)
-     }
-   )
-   .fail(function() {
-    alert( "error" );
+    centerPoint: centerPoint.toJSON()},
+    function ajaxResultWithLocation( data ) {
+      var locations = data.locations
+      putLocationsOnMap(map,locations);
+    })
+    .fail(function() {
+      alert( "error" );
   })
 }
 
-function initMap(centerPoint, locations)
+function initMap(centerPoint)
 {
   var mapCanvas = document.getElementById('map');
   var mapOptions = {
@@ -43,25 +55,24 @@ function initMap(centerPoint, locations)
       var bounds = map.getBounds()
       getNewLocations(bounds, map);
   })
-  putLocationsOnMap(map,locations);
+  // putLocationsOnMap(map,locations);
 }
-function getLocationsFromSite(locations)
+
+function getCenterFromSite()
 {
-  var jqxhr = $.get("/locations",function ajaxResultWithLocation( data ) {
-         
-       initMap(data.center_point,data.locations)
+  var jqxhr = $.get("/locations",function ajaxResultWithLocation( data ) {         
+       initMap(data.center_point)
      }
    )
    .fail(function() {
     alert( "error" );
-  })
-  
+  })  
 }
+
 function initialize() {
-  let locations = []
-  getLocationsFromSite(locations)
-  
+  getCenterFromSite()  
 }
+
 $(document).ready(function() {
   google.maps.event.addDomListener(window, 'load', initialize)
 })
