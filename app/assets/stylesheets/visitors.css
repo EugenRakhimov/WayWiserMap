@@ -1,5 +1,12 @@
-#map-container {
+html, body,#map-container, #map-canvas {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width:  100%;
+}
+/*#map-container {
    height: 400px;
+   width: 100%;
    border-radius: 16px 16px;
    border-color: #fff;
    border-style: solid;
@@ -10,4 +17,12 @@
  #map-canvas {
    height: 384px;
    width: 100%;
- }
+ }*/
+ /* Bootstrap Css Map Fix*/
+#map-container #map-canvas img {
+  max-width: none;
+}
+/* Bootstrap Css Map Fix*/
+#map-container #map-canvas label {
+  width: auto; display:inline;
+}

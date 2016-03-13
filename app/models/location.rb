@@ -53,4 +53,7 @@ class Location
       {:info=>"Kami Sushi", :latitude=>-36.84753108, :longitude=>174.761552}, 
       {:info=>"Nikko Sushi and Sake Bar", :latitude=>-36.850006, :longitude=>174.764126}]
   end
+  def self.around(center_point, left_point = 0, right_point = 0)
+      all
+  end
 end

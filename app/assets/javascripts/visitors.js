@@ -1,16 +1,20 @@
-function putLocationsOnMap(locations)
+function putLocationsOnMap(centerPoint, locations)
 {
-  locations
+  var mapCanvas = document.getElementById('map-canvas');
+  var mapOptions = {
+    center: new google.maps.LatLng(centerPoint.latitude, centerPoint.longitude),
+    zoom: 12,
+    mapTypeId: google.maps.MapTypeId.ROADMAP
+  }
+  var map = new google.maps.Map(mapCanvas, mapOptions);
+  console.log(map);
 }
 function getLocationsFromSite(locations)
 {
   // console.log('test')
   var jqxhr = $.get("/locations",function ajaxResultWithLocation( data ) {
          
-       for(i=0;i<data.length;i++)
-       {         
-         locations.push(data[i])        
-       }
+       putLocationsOnMap(data.center_point,data.locations)
      }
    )
    .fail(function() {
